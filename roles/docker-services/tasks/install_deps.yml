@@ -1,0 +1,8 @@
+---
+- name: Install deps
+  become: true
+  ansible.builtin.apt:
+    name:
+      - rsync
+    state: present
+    update_cache: true

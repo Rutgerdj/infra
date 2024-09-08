@@ -1,0 +1,48 @@
+---
+- name: Set service variable
+  ansible.builtin.set_fact:
+    service_name: "{{ project_file.path | dirname | basename }}"
+
+- name: Set service variable
+  ansible.builtin.set_fact:
+    service_config_path: "/apps/docker/{{ service_name }}"
+
+- name: Apply template to compose file
+  ansible.builtin.template:
+    src: "{{ project_file.path }}"
+    dest: "{{ project_file.path }}"
+    mode: "644"
+
+- name: Check if .env file exists
+  ansible.builtin.stat:
+    path: "{{ project_file.path | dirname }}/.env"
+  register: p
+
+
+- name: Apply template to .env file
+  ansible.builtin.template:
+    src: "{{ project_file.path | dirname }}/.env"
+    dest: "{{ project_file.path | dirname }}/.env"
+    mode: "644"
+  when: p.stat.exists
+
+- name: Create directory for config files for {{ service_name }}
+  become: true
+  ansible.builtin.file:
+    path: "{{ service_config_path }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "755"
+
+# - name: Include any tasks that are in the service directory
+#   ansible.builtin.include_tasks: "{{ setup_item }}"
+#   with_fileglob:
+#     - "{{ project_file.path | dirname }}/setup.yml"
+#   loop_control:
+#     loop_var: setup_item
+
+- name: Docker compose up for {{ service_name }}
+  community.docker.docker_compose_v2:
+    state: present
+    project_src: "{{ project_file.path | dirname }}"

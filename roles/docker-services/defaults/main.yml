@@ -1,0 +1,4 @@
+---
+# defaults file for docker-services
+services_dir: services
+target_dir: .

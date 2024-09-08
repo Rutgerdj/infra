@@ -1,0 +1,37 @@
+---
+- name: Install dependencies
+  ansible.builtin.import_tasks: install_deps.yml
+
+- name: Create docker applications folder
+  become: true
+  ansible.builtin.file:
+    path: /apps/docker
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "755"
+    recurse: true
+
+- name: Copy the entire application directory to the target
+  ansible.posix.synchronize:
+    src: "{{ services_dir }}"
+    dest: "{{ target_dir }}"
+    recursive: true
+    delete: true
+
+- name: Find all docker-compose.yml and .env template files
+  ansible.builtin.find:
+    recurse: true
+    paths: "{{ target_dir }}/{{ services_dir }}"
+    hidden: true
+    patterns:
+      - docker-compose.yml
+      - .env
+  register: template_files
+
+- name: Docker compose up for all project files
+  ansible.builtin.include_tasks: per_service.yml
+  loop: "{{ template_files.files | selectattr('path', 'search', 'docker-compose.yml') | list }}"
+  loop_control:
+    loop_var: project_file
+  when: project_file.path | dirname | basename in ansible_run_tags
