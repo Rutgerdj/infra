@@ -1,0 +1,13 @@
+services:
+  app:
+    image: ghcr.io/hargata/lubelogger:v1.3.6
+    restart: unless-stopped
+    volumes:
+      - "{{ service_config_path }}/config:/App/config"
+      - "{{ service_config_path }}/data:/App/data"
+      - "{{ service_config_path }}/log:/App/log"
+      - "{{ service_config_path }}/documents:/App/wwwroot/documents"
+      - "{{ service_config_path }}/images:/App/wwwroot/images"
+    ports:
+      - "{{ lubelogger.port }}:8080"
+    env_file: .env

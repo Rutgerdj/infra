@@ -1,0 +1,16 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v1.11.0
+    container_name: mealie
+    restart: always
+    ports:
+        - "{{ mealie.port }}:9000"
+
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+
+    volumes:
+      - "{{ service_config_path }}:/app/data/"
+    env_file: .env

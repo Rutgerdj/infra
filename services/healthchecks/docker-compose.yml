@@ -1,0 +1,8 @@
+services:
+  healthchecks:
+    image: lscr.io/linuxserver/healthchecks:latest
+    container_name: healthchecks
+    env_file: .env
+    ports:
+      - "{{ healthchecks.port }}:8000"
+    restart: unless-stopped
