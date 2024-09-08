@@ -1,0 +1,17 @@
+---
+- name: Install docker on dockerbox
+  hosts: dockerbox
+  vars_files:
+    - vars/vault.yml
+  roles:
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: docker-services
+      tags:
+        - always
