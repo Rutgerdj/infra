@@ -1,0 +1,3 @@
+{{caddy.ha.hostname}} {
+    reverse_proxy {{caddy.ha.reverse_proxy}}
+}
