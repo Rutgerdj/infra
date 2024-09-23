@@ -7,24 +7,18 @@
   ansible.builtin.set_fact:
     service_config_path: "/apps/docker/{{ service_name }}"
 
-- name: Apply template to compose file
+- name: Find all files in directory
+  ansible.builtin.find:
+    paths: "{{ project_file.path | dirname }}"
+    hidden: true
+  register: files_to_template
+
+- name: Apply template to files in directory
   ansible.builtin.template:
-    src: "{{ project_file.path }}"
-    dest: "{{ project_file.path }}"
+    src: "{{ item.path }}"
+    dest: "{{ item.path }}"
     mode: "644"
-
-- name: Check if .env file exists
-  ansible.builtin.stat:
-    path: "{{ project_file.path | dirname }}/.env"
-  register: p
-
-
-- name: Apply template to .env file
-  ansible.builtin.template:
-    src: "{{ project_file.path | dirname }}/.env"
-    dest: "{{ project_file.path | dirname }}/.env"
-    mode: "644"
-  when: p.stat.exists
+  loop: "{{ files_to_template.files }}"
 
 - name: Create directory for config files for {{ service_name }}
   become: true

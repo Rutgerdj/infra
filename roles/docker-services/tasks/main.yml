@@ -34,4 +34,3 @@
   loop: "{{ template_files.files | selectattr('path', 'search', 'docker-compose.yml') | list }}"
   loop_control:
     loop_var: project_file
-  when: project_file.path | dirname | basename in ansible_run_tags
