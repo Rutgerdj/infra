@@ -4,4 +4,4 @@ services:
     container_name: renovate
     restart: unless-stopped
     volumes:
-      - ./config.js:/usr/src/app/config.js
+      - ./config.js:/usr/src/app/config.js:ro
