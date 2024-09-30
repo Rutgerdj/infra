@@ -1,0 +1,30 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/latest/configs/services
+
+- Admin stuff:
+  - Proxmox:
+      href: https://192.168.2.201:8006/
+      siteMonitor: https://192.168.2.201:8006/
+      icon: proxmox.png
+  - Healthchecks:
+      href: http://{{ansible_host}}:{{healthchecks.port}}/
+      siteMonitor: http://{{ansible_host}}:{{healthchecks.port}}/
+      icon: healthchecks.png
+
+- Apps:
+  - Lubelog:
+      href: http://{{ansible_host}}:{{lubelogger.port}}/
+      siteMonitor: http://{{ansible_host}}:{{lubelogger.port}}/
+      icon: lubelogger.png
+
+- Media:
+  - MeTube:
+      href: http://{{ansible_host}}:{{metube.port}}/
+      siteMonitor: http://{{ansible_host}}:{{metube.port}}/
+      icon: metube.png
+
+  - Jellyfin:
+      href: http://jellyfin:8096/
+      siteMonitor: http://jellyfin:8096/
+      icon: jellyfin.png

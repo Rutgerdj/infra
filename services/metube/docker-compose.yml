@@ -7,3 +7,5 @@ services:
       - "{{ metube.port }}:8081"
     volumes:
       - "{{ service_config_path }}:/downloads"
+    environment:
+      - DELETE_FILE_ON_TRASHCAN=true
