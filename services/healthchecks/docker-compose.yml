@@ -1,6 +1,6 @@
 services:
   healthchecks:
-    image: lscr.io/linuxserver/healthchecks:latest
+    image: lscr.io/linuxserver/healthchecks:v3.6-ls255
     container_name: healthchecks
     env_file: .env
     ports:
