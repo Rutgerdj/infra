@@ -17,7 +17,7 @@
     src: "{{ services_dir }}"
     dest: "{{ target_dir }}"
     recursive: true
-    delete: true
+    delete: false
 
 - name: Find all docker-compose.yml and .env template files
   ansible.builtin.find:

@@ -1,11 +1,13 @@
 ---
-- name: Set service variable
-  ansible.builtin.set_fact:
-    service_name: "{{ project_file.path | dirname | basename }}"
+- name: Set variables variable
+  block:
+    - name: Set service name  
+      ansible.builtin.set_fact:
+        service_name: "{{ project_file.path | dirname | basename }}"
 
-- name: Set service variable
-  ansible.builtin.set_fact:
-    service_config_path: "/apps/docker/{{ service_name }}"
+    - name: Set service_config_path
+      ansible.builtin.set_fact:
+        service_config_path: "/apps/docker/{{ service_name }}"
 
 - name: Find all files in directory
   ansible.builtin.find:
@@ -13,10 +15,7 @@
     hidden: true
     recurse: true
     patterns:
-      - "*.yaml"
-      - "*.yml"
       - "*.j2"
-      - "*.env"
   register: files_to_template
 
 - name: Apply template to files in directory
@@ -25,6 +24,7 @@
     dest: "{{ item.path.replace('.j2', '') }}"
     mode: "644"
   loop: "{{ files_to_template.files }}"
+  register: templated
 
 - name: Create directory for config files for {{ service_name }}
   become: true
@@ -34,15 +34,10 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "755"
-
-# - name: Include any tasks that are in the service directory
-#   ansible.builtin.include_tasks: "{{ setup_item }}"
-#   with_fileglob:
-#     - "{{ project_file.path | dirname }}/setup.yml"
-#   loop_control:
-#     loop_var: setup_item
+  when: "{{ templated.changed }}"
 
 - name: Docker compose up for {{ service_name }}
   community.docker.docker_compose_v2:
     state: present
     project_src: "{{ project_file.path | dirname }}"
+  when: "{{ templated.changed }}"
