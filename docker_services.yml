@@ -15,3 +15,5 @@
     - role: docker-services
       tags:
         - always
+
+    - role: cronjobs

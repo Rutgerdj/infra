@@ -1,0 +1,8 @@
+
+
+cronjobs:
+  - name: Run Renovate Bot every 2 hours
+    job: docker compose --file ~/services/renovate/docker-compose.yml up
+    user: "{{ ansible_user }}"
+    hour: "*/2"
+    minute: "0"
