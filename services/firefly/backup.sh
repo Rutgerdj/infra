@@ -119,6 +119,10 @@ backup () {
     for file in "${to_backup[@]}"; do
         rm -f "$dest_path/tmp/$file"
     done
+
+    # Remove all backups that are older than 5 days
+    find "$dest_path" -mtime +5 | xargs -L1 rm -f
+
     rmdir "$dest_path/tmp"
 }
 
