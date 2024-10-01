@@ -1,0 +1,24 @@
+---
+- name: Install Normal Cronjobs
+  ansible.builtin.cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    user: "{{ item.user | default('root') }}"
+    minute: "{{ item.minute | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    day: "{{ item.day | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    state: present
+  loop: "{{ cronjobs }}"
+  when: item.special_time is not defined
+
+- name: Install Special Time Cronjobs
+  ansible.builtin.cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    user: "{{ item.user | default('root') }}"
+    special_time: "{{ item.special_time }}"
+    state: present
+  loop: "{{ cronjobs }}"
+  when: item.special_time is defined
