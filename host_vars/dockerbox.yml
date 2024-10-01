@@ -5,9 +5,14 @@ cronjobs:
     job: docker compose --file ~/services/renovate/docker-compose.yml up
     user: "{{ ansible_user }}"
     hour: "*/2"
-    minute: "0"
+    minute: 0
   - name: Run Firefly automations at 2 am
     job: wget -qO- http://app:{{firefly.port}}/api/v1/cron/{{firefly.cron_token}}
     user: "{{ ansible_user }}"
-    hour: "2"
-    minute: "0"
+    hour: 2
+    minute: 0
+  - name: Run Firefly backup at 3 am
+    job: bash ~/services/firefly/backup.sh backup /apps/docker/firefly/backups/$(date '+%F').tar.gz
+    user: "{{ ansible_user }}"
+    hour: 3
+    minute: 0
