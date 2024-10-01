@@ -16,7 +16,7 @@
       - "*.yaml"
       - "*.yml"
       - "*.j2"
-      - .env
+      - "*.env"
   register: files_to_template
 
 - name: Apply template to files in directory

@@ -6,3 +6,8 @@ cronjobs:
     user: "{{ ansible_user }}"
     hour: "*/2"
     minute: "0"
+  - name: Run Firefly automations at 2 am
+    job: wget -qO- http://app:{{firefly.port}}/api/v1/cron/{{firefly.cron_token}}
+    user: "{{ ansible_user }}"
+    hour: "2"
+    minute: "0"
