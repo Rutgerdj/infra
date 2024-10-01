@@ -18,6 +18,11 @@
       siteMonitor: http://{{ansible_host}}:{{lubelogger.port}}/
       icon: lubelogger.png
 
+  - Firefly:
+      href: http://{{ansible_host}}:{{firefly.port}}
+      siteMonitor: http://{{ansible_host}}:{{firefly.port}}
+      icon: firefly.png
+
 - Media:
   - MeTube:
       href: http://{{ansible_host}}:{{metube.port}}/
