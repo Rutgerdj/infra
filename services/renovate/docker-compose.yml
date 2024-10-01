@@ -2,6 +2,8 @@ services:
   renovate:
     image: renovate/renovate:38.104.0
     container_name: renovate
-    restart: unless-stopped
+    restart: no
+    environment:
+      - RENOVATE_TOKEN={{renovate.gh_token}}
     volumes:
       - ./config.js:/usr/src/app/config.js:ro

@@ -1,6 +1,4 @@
 module.exports = {
-  token: "{{ renovate.gh_token }}",
-
   repositories: [
     'rutgerdj/infra',
   ],
