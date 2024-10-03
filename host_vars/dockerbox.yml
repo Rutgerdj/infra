@@ -2,17 +2,17 @@
 
 cronjobs:
   - name: Run Renovate Bot every 2 hours
-    job: docker compose --file ~/services/renovate/docker-compose.yml up
+    job: /usr/local/bin/runitor -slug renovate-bot -- docker compose --file ~/services/renovate/docker-compose.yml up
     user: "{{ ansible_user }}"
     hour: "*/2"
     minute: 0
   - name: Run Firefly automations at 2 am
-    job: wget -qO- http://localhost:{{firefly.port}}/api/v1/cron/{{firefly.cron_token}}
+    job: /usr/local/bin/runitor -slug firefly-automations -- wget -qO- http://localhost:{{firefly.port}}/api/v1/cron/{{firefly.cron_token}}
     user: "{{ ansible_user }}"
     hour: 2
     minute: 0
   - name: Run Firefly backup at 3 am
-    job: bash ~/services/firefly/backup.sh backup /apps/docker/firefly/backups/$(date '+%F').tar.gz
+    job: /usr/local/bin/runitor -slug firefly-backup -- ~/services/firefly/run_backup.sh
     user: "{{ ansible_user }}"
     hour: 3
     minute: 0
