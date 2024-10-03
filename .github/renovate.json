@@ -1,3 +1,7 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json"
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "docker-compose": {
+    "enabled": true,
+    "fileMatch": ["(^|/)docker-compose\\.yml\\.j2$"]
+  }
 }
