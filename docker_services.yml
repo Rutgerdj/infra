@@ -12,6 +12,13 @@
         - never
         - install_docker
 
+    - role: install/runitor
+      runitor_url: "http://localhost:{{healthchecks.port}}/ping"
+      runitor_ping_key: "{{ healthchecks.ping_key }}"
+      tags:
+        - never
+        - install_runitor
+
     - role: docker-services
       tags:
         - always
