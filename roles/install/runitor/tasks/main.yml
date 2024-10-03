@@ -1,0 +1,83 @@
+---
+- name: Get status of runitor_install_path
+  ansible.builtin.stat:
+    path: "{{ runitor_install_path }}"
+  register: is_installed
+
+- name: Set runitor installed
+  ansible.builtin.set_fact:
+    runitor_is_installed: "{{ is_installed.stat.exists }}"
+
+- name: Check runitor version
+  ansible.builtin.shell: "{{ runitor_install_path }} --version | awk '{ print $2 }' | cut -c 2-"
+  changed_when: false
+  register: installed_version_registered
+  when: runitor_is_installed
+
+- name: Get latest release
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/bdd/runitor/releases/latest
+    url_username: "{{ github_api_user | default(omit) }}"
+    url_password: "{{ github_api_pass | default(omit) }}"
+    return_content: true
+    force_basic_auth: "{{ github_api_auth | default(omit) }}"
+  register: release_version_registered
+  when: runitor_download_latest_ver
+
+- name: Set runitor version (latest)
+  ansible.builtin.set_fact:
+    runitor_ver: "{{ release_version_registered.json.tag_name | regex_replace('v') }}"
+  when: runitor_download_latest_ver
+
+- name: Set runitor version (pinned)
+  ansible.builtin.set_fact:
+    runitor_ver: "{{ runitor_pinned_ver }}"
+  when: not runitor_download_latest_ver
+
+- name: Download (newer) Runitor
+  when: |
+    not  runitor_is_installed
+    or  (runitor_is_installed and     runitor_download_latest_ver and installed_version_registered.stdout != runitor_ver)
+    or  (runitor_is_installed and not runitor_download_latest_ver and installed_version_registered.stdout != runitor_pinned_ver)
+  block:
+    - name: Ensure runitor_download_directory does not exist
+      ansible.builtin.file:
+        path: "{{ runitor_download_directory }}"
+        state: absent
+
+    - name: Create runitor_download_directory
+      ansible.builtin.file:
+        path: "{{ runitor_download_directory }}"
+        state: directory
+        mode: "0755"
+
+    - name: Download runitor
+      ansible.builtin.get_url:
+        url: "{{ runitor_gh_url }}/v{{ runitor_ver }}/runitor-v{{ runitor_ver }}-{{ runitor_distro }}"
+        dest: "{{ runitor_download_directory }}"
+        force: true
+        owner: root
+        group: root
+        mode: +x
+
+    - name: Move to /usr/local/bin
+      ansible.builtin.command: "mv {{ runitor_download_directory }}/runitor-v{{ runitor_ver }}-{{ runitor_distro }} {{ runitor_install_path }}"
+      args:
+        removes: "{{ runitor_download_directory }}/runitor-v{{ runitor_ver }}-{{ runitor_distro }}"
+
+- name: Populate /etc/environment
+  block:
+    - name: Add api url
+      ansible.builtin.lineinfile:
+        dest: "/etc/environment"
+        state: present
+        regexp: "^HC_API_URL="
+        line: "HC_API_URL={{ runitor_url }}"
+      become: true
+    - name: Add ping key
+      ansible.builtin.lineinfile:
+        dest: "/etc/environment"
+        state: present
+        regexp: "^HC_PING_KEY="
+        line: "HC_PING_KEY={{ runitor_ping_key }}"
+      become: true
