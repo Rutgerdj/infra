@@ -16,3 +16,6 @@ cronjobs:
     user: "{{ ansible_user }}"
     hour: 3
     minute: 0
+
+package_list:
+  - name: cifs-utils
