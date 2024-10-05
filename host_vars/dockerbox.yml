@@ -19,3 +19,11 @@ cronjobs:
 
 package_list:
   - name: cifs-utils
+
+
+mounts:
+  - src: //{{omv.hostname}}/hdd_media
+    path: /mnt/hdd_media
+    opts: username={{ omv.username }},password={{ omv.password }},rw,uid=1000
+    state: mounted
+    fstype: cifs

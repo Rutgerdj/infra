@@ -6,6 +6,7 @@
   roles:
     - role: grog.package
       become: true
+    - role: mounts
 
     - role: geerlingguy.docker
       docker_users:
