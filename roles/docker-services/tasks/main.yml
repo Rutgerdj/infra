@@ -25,8 +25,7 @@
     paths: "{{ target_dir }}/{{ services_dir }}"
     hidden: true
     patterns:
-      - docker-compose.yml
-      - .env
+      - docker-compose.yml*
   register: template_files
 
 - name: Docker compose up for all project files
