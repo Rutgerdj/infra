@@ -1,0 +1,78 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3.39
+    container_name: gluetun
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+    volumes:
+      - ./wg.conf:/gluetun/wireguard/wg0.conf
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 8085:8085 # qbittorrent
+      - 8989:8989 # Sonarr
+      - 9696:9696 # Prowlarr
+
+    restart: unless-stopped
+
+
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent:release-5.0.0
+    network_mode: "service:gluetun"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - WEBUI_PORTS=8085/tcp,8085/udp
+    volumes:
+      - "{{ service_config_path }}/qbittorrent:/config"
+      - "/mnt/hdd_media/arr-data/torrents:/data/torrents"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+
+
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:release-1.24.3.4754
+    network_mode: "service:gluetun"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - "{{ service_config_path }}/prowlarr:/config"
+      - /mnt/hdd_media/arr-data:/data
+
+
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:release-4.0.9.2244
+    network_mode: "service:gluetun"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.default.disable_ipv6=1
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - "{{ service_config_path }}/sonarr:/config"
+      - /mnt/hdd_media/arr-data:/data
+

@@ -33,3 +33,19 @@
       href: http://jellyfin:8096/
       siteMonitor: http://jellyfin:8096/
       icon: jellyfin.png
+
+- Arr*:
+  - Sonarr:
+      href: http://{{ansible_host}}:8989/
+      siteMonitor: http://{{ansible_host}}:8989/
+      icon: sonarr.png
+
+  - Prowlarr:
+      href: http://{{ansible_host}}:9696/
+      siteMonitor: http://{{ansible_host}}:9696/
+      icon: prowlarr.png
+
+  - qBittorrent:
+      href: http://{{ansible_host}}:8085/
+      siteMonitor: http://{{ansible_host}}:8085/
+      icon: qbittorrent.png

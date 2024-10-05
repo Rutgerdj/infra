@@ -1,0 +1,9 @@
+[Interface]
+PrivateKey = {{ arr.wg_privatekey }}
+Address = {{ arr.wg_address }}
+DNS = {{ arr.wg_dns }}
+
+[Peer]
+PublicKey = {{ arr.wg_publickey }}
+AllowedIPs = 0.0.0.0/0
+Endpoint = {{ arr.wg_endpoint }}
