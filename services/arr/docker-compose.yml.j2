@@ -38,6 +38,7 @@ services:
     volumes:
       - "{{ service_config_path }}/qbittorrent:/config"
       - "/mnt/hdd_media/arr-data/torrents:/data/torrents"
+    restart: unless-stopped
     depends_on:
       gluetun:
         condition: service_healthy
@@ -58,6 +59,7 @@ services:
     volumes:
       - "{{ service_config_path }}/prowlarr:/config"
       - /mnt/hdd_media/arr-data:/data
+    restart: unless-stopped
 
 
   sonarr:
@@ -75,4 +77,5 @@ services:
     volumes:
       - "{{ service_config_path }}/sonarr:/config"
       - /mnt/hdd_media/arr-data:/data
+    restart: unless-stopped
 
