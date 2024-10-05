@@ -4,6 +4,9 @@
   vars_files:
     - vars/vault.yml
   roles:
+    - role: grog.package
+      become: true
+
     - role: geerlingguy.docker
       docker_users:
         - "{{ ansible_user }}"
