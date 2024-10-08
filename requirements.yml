@@ -1,2 +1,4 @@
-- name: geerlingguy.docker
-- name: GROG.package
+roles:
+  - src: geerlingguy.docker
+  - src: GROG.package
+  - src: fuzzymistborn.autorestic
