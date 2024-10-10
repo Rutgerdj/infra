@@ -16,6 +16,24 @@ cronjobs:
     user: "{{ ansible_user }}"
     hour: 3
     minute: 0
+  - name: Backup using autorestic at 4 am
+    job: /usr/local/bin/runitor -slug docker-services-backup -- /usr/local/bin/autorestic backup -a --ci
+    user: "{{ ansible_user }}"
+    hour: 4
+    minute: 0
+  - name: Run autorestic forget
+    job: /usr/local/bin/runitor -slug dockerbox-autorestic-prune -- /usr/local/bin/autorestic forget -a --prune --ci
+    user: "{{ ansible_user }}"
+    weekday: 1
+    minute: 0
+    hour: 2
+  - name: Run autorestic check
+    job: /usr/local/bin/runitor -slug dockerbox-autorestic-check -- /usr/local/bin/autorestic check -a --ci
+    user: "{{ ansible_user }}"
+    weekday: 1
+    minute: 0
+    hour: 0
+  
 
 package_list:
   - name: cifs-utils
