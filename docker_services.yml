@@ -27,4 +27,6 @@
       tags:
         - always
 
+    - role: fuzzymistborn.autorestic
+      become: true
     - role: cronjobs
