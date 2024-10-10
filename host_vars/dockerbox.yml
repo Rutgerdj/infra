@@ -28,7 +28,7 @@ cronjobs:
     minute: 0
     hour: 2
   - name: Run autorestic check
-    job: /usr/local/bin/runitor -slug dockerbox-autorestic-check -- /usr/local/bin/autorestic check -a --ci
+    job: /usr/local/bin/runitor -slug dockerbox-autorestic-check -- /usr/local/bin/autorestic check --ci
     user: "{{ ansible_user }}"
     weekday: 1
     minute: 0
