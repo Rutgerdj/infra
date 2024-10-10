@@ -27,3 +27,31 @@ mounts:
     opts: username={{ omv.username }},password={{ omv.password }},rw,uid=1000,noauto,x-systemd.automount
     state: mounted
     fstype: cifs
+
+autorestic_config_user: "{{ ansible_user }}"
+autorestic_user_directory: "/home/{{ ansible_user}}"
+autorestic_run_check: false
+autorestic_config_yaml:
+  version: 2
+  backends:
+    remote:
+      type: b2
+      key: "{{restic.repo_key}}"
+      path: '{{backblaze.bucket}}:dockerbox/services'
+      env:
+        B2_ACCOUNT_ID: "{{backblaze.applicationid}}"
+        B2_ACCOUNT_KEY: "{{backblaze.applicationkey}}"
+
+  locations:
+    docker:
+      from: '/apps/docker/'
+      to:
+        - remote
+      options:
+        backup:
+          exclude:
+            - 'metube'
+        forget:
+          keep-daily: 1
+          keep-weekly: 8
+          keep-monthly: 4
