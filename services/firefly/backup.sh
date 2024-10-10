@@ -57,11 +57,6 @@ backup () {
         warn "Provided file path already exists: $full_path. Overwriting"
     fi
 
-    # Create temporary directory
-    if [ ! -d "$dest_path/tmp" ]; then
-        mkdir "$dest_path/tmp"
-    fi
-
     # Files backup
     if [ $no_files = "false" ]; then
         not_found=()
@@ -70,7 +65,7 @@ backup () {
                 if [[ ! -f $file ]]; then
                     not_found+=("$file")
                 else
-                    cp "$file" "$dest_path/tmp/"
+                    cp "$file" "$dest_path"
                     to_backup+=($(basename "$file"))
                 fi
             done
@@ -90,7 +85,7 @@ backup () {
     app_version=$(docker exec -it $app_container grep -F "'version'" /var/www/html/config/firefly.php | tr -s ' ' | cut -d "'" -f 4)
     db_version=$(docker exec -it $app_container grep -F "'db_version'" /var/www/html/config/firefly.php | tr -s ' ' | tr -d ',' | cut -d " " -f 4)
     info 'Backing up App & database version numbers.'
-    echo -e "Application: $app_version\nDatabase: $db_version" > "$dest_path/tmp/version.txt"
+    echo -e "Application: $app_version\nDatabase: $db_version" > "$dest_path/version.txt"
     to_backup+=(version.txt)
 
     # DB container
@@ -99,7 +94,7 @@ backup () {
         warn "db container is not running. Not backing up."
     else
         info 'Backing up database'
-        docker exec $db_container bash -c '/usr/bin/mariadb-dump -u $MYSQL_USER --password="$MYSQL_PASSWORD" "$MYSQL_DATABASE"' > "$dest_path/tmp/firefly_db.sql"
+        docker exec $db_container bash -c '/usr/bin/mariadb-dump -u $MYSQL_USER --password="$MYSQL_PASSWORD" "$MYSQL_DATABASE"' > "$dest_path/firefly_db.sql"
         to_backup+=("firefly_db.sql")
     fi
 
@@ -108,22 +103,10 @@ backup () {
         warn "upload volume does NOT exist. Not backing up."
     else
         info 'Backing up upload volume'
-        docker run --rm -v "$upload_volume:/tmp" -v "$dest_path/tmp:/backup" alpine tar -czf "/backup/firefly_upload.tar.gz" -C "/" "tmp"
+        docker run --rm -v "$upload_volume:/tmp" -v "$dest_path/:/backup" alpine tar -czf "/backup/firefly_upload.tar.gz" -C "/" "tmp"
         to_backup+=("firefly_upload.tar.gz")
     fi
 
-    # Compress
-    tar -C "$dest_path/tmp" -czf "$dest_path/$dest_file" --files-from <(printf "%s\n" "${to_backup[@]}")
-
-    # Clean up
-    for file in "${to_backup[@]}"; do
-        rm -f "$dest_path/tmp/$file"
-    done
-
-    # Remove all backups that are older than 5 days
-    find "$dest_path" -mtime +5 | xargs -L1 rm -f
-
-    rmdir "$dest_path/tmp"
 }
 
 restore () {
