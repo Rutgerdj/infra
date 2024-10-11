@@ -1,6 +1,14 @@
 
 
 cronjobs:
+  - name: SHELL
+    env: true
+    job: /bin/bash
+    user: "{{ ansible_user }}"
+  - name: BASH_ENV
+    env: true
+    job: /home/{{ansible_user}}/.profile
+    user: "{{ ansible_user }}"
   - name: Run Renovate Bot every 2 hours
     job: /usr/local/bin/runitor -slug renovate-bot -- docker compose --file ~/services/renovate/docker-compose.yml up
     user: "{{ ansible_user }}"

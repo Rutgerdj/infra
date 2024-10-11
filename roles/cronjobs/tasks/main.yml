@@ -22,3 +22,12 @@
     state: present
   loop: "{{ cronjobs }}"
   when: item.special_time is defined
+
+- name: Add env variables to crontab
+  ansible.builtin.cron:
+    name: "{{ item.name }}"
+    env: true
+    job: "{{ item.job }}"
+    user: "{{ item.user | default('root') }}"
+  loop: "{{ cronjobs }}"
+  when: item.env is defined and item.env

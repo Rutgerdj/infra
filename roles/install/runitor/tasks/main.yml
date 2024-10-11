@@ -81,3 +81,10 @@
         regexp: "^HC_PING_KEY="
         line: "HC_PING_KEY={{ runitor_ping_key }}"
       become: true
+
+- name: Add /usr/local/bin to PATH in .profile
+  ansible.builtin.lineinfile:
+    path: "/home/{{ ansible_user }}/.profile"
+    regexp: "^export PATH=.*:/usr/local/bin$"
+    line: "export PATH=$PATH:/usr/local/bin"
+    state: present
