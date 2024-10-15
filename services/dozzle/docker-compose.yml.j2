@@ -8,3 +8,4 @@ services:
       - DOZZLE_NO_ANALYTICS=true
     ports:
       - "{{dozzle.port}}:8080"
+    restart: unless-stopped

@@ -2,6 +2,7 @@ services:
   memos:
     image: neosmemo/memos:0.22.5
     container_name: memos
+    restart: unless-stopped
     volumes:
       - "{{ service_config_path }}/:/var/opt/memos"
     ports:
