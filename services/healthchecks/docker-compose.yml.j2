@@ -6,3 +6,5 @@ services:
     ports:
       - "{{ healthchecks.port }}:8000"
     restart: unless-stopped
+    volumes:
+      - "{{ service_config_path }}/config:/config"
