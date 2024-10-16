@@ -1,7 +1,7 @@
 services:
   gluetun:
-    image: qmcgaw/gluetun:v3.39
     container_name: gluetun
+    image: qmcgaw/gluetun:v3.39
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
       - net.ipv6.conf.default.disable_ipv6=1
@@ -19,7 +19,7 @@ services:
       - 8989:8989 # Sonarr
       - 9696:9696 # Prowlarr
       - 6767:6767 # Bazarr
-
+      - 5055:5055 # Jellyseer
     restart: unless-stopped
 
 
@@ -39,10 +39,10 @@ services:
     volumes:
       - "{{ service_config_path }}/qbittorrent:/config"
       - "/mnt/hdd_media/arr-data/torrents:/data/torrents"
-    restart: unless-stopped
     depends_on:
       gluetun:
         condition: service_healthy
+    restart: unless-stopped
 
 
   prowlarr:
@@ -81,10 +81,9 @@ services:
     restart: unless-stopped
 
   bazarr:
-    network_mode: "service:gluetun"
     container_name: bazarr
     image: ghcr.io/hotio/bazarr:release-1.4.5
-    restart: unless-stopped
+    network_mode: "service:gluetun"
     environment:
       - PUID=1000
       - PGID=1000
@@ -94,3 +93,17 @@ services:
     volumes:
       - "{{ service_config_path }}/bazarr:/config"
       - /mnt/hdd_media/arr-data:/data
+    restart: unless-stopped
+
+  jellyseerr:
+    container_name: jellyseerr
+    image: ghcr.io/hotio/jellyseerr:release-1.9.2
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Europe/Amsterdam
+    volumes:
+      - "{{ service_config_path }}/jellyseerr:/config"
+    restart: unless-stopped
