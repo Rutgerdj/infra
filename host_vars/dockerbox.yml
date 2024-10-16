@@ -77,6 +77,7 @@ autorestic_config_yaml:
         backup:
           exclude:
             - 'metube'
+            - 'grocy/config/log/logrotate.status'
         forget:
           keep-daily: 1
           keep-weekly: 8
