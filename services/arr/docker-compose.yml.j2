@@ -19,7 +19,6 @@ services:
       - 8989:8989 # Sonarr
       - 9696:9696 # Prowlarr
       - 6767:6767 # Bazarr
-      - 5055:5055 # Jellyseer
     restart: unless-stopped
 
 
@@ -98,7 +97,8 @@ services:
   jellyseerr:
     container_name: jellyseerr
     image: ghcr.io/hotio/jellyseerr:release-1.9.2
-    network_mode: "service:gluetun"
+    ports:
+      - 5055:5055 # Jellyseer
     environment:
       - PUID=1000
       - PGID=1000
