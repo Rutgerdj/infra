@@ -1,0 +1,14 @@
+---
+- name: Setup debian VM for NextCloud
+  hosts: volgendewolk
+  vars_files:
+    - vars/vault.yml
+  roles:
+    - role: grog.package
+      become: true
+    - role: mounts
+
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true

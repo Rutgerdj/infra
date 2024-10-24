@@ -5,3 +5,9 @@ all:
       ansible_user: rutger
       ansible_python_interpreter: /usr/bin/python3
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+
+    volgendewolk:
+      ansible_host: 192.168.2.45
+      ansible_user: rutger
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"

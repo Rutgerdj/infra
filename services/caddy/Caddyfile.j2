@@ -1,3 +1,8 @@
 {{caddy.ha.hostname}} {
     reverse_proxy {{caddy.ha.reverse_proxy}}
 }
+
+{{caddy.nc.hostname}} {
+    header Strict-Transport-Security max-age=31536000;
+    reverse_proxy {{caddy.nc.reverse_proxy}}
+}
