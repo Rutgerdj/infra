@@ -6,7 +6,12 @@
   roles:
     - role: grog.package
       become: true
+      tags:
+        - never
+
     - role: mounts
+      tags:
+        - never
 
     - role: geerlingguy.docker
       docker_users:
@@ -29,4 +34,9 @@
 
     - role: fuzzymistborn.autorestic
       become: true
+      tags:
+        - never
+
     - role: cronjobs
+      tags:
+        - never

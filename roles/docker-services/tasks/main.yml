@@ -19,7 +19,7 @@
     recursive: true
     delete: false
 
-- name: Find all docker-compose.yml and .env template files
+- name: Find all docker-compose.yml files
   ansible.builtin.find:
     recurse: true
     paths: "{{ target_dir }}/{{ services_dir }}"
@@ -27,9 +27,11 @@
     patterns:
       - docker-compose.yml*
   register: template_files
+  delegate_to: localhost
 
 - name: Docker compose up for all project files
   ansible.builtin.include_tasks: per_service.yml
   loop: "{{ template_files.files | selectattr('path', 'search', 'docker-compose.yml') | list }}"
   loop_control:
     loop_var: project_file
+  when: (project_file.path | dirname | basename) in ansible_run_tags or "all" in ansible_run_tags
