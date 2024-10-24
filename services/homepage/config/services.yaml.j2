@@ -15,9 +15,17 @@
       href: http://{{ansible_host}}:{{dozzle.port}}/
       siteMonitor: http://{{ansible_host}}:{{dozzle.port}}/
       icon: dozzle.png
-
+  - Openmediavault:
+      href: https://{{omv.hostname}}
+      siteMonitor: https://{{omv.hostname}}
+      icon: openmediavault.png
 
 - Apps:
+  - Nextcloud:
+      href: https://{{caddy.nc.hostname}}
+      siteMonitor: https://{{caddy.nc.hostname}}
+      icon: nextcloud.png
+
   - Lubelog:
       href: http://{{ansible_host}}:{{lubelogger.port}}/
       siteMonitor: http://{{ansible_host}}:{{lubelogger.port}}/
