@@ -8,6 +8,18 @@
       become: true
       tags:
         - never
+        - packages
+
+    - role: systemd
+      become: true
+      tags:
+        - never
+        - systemd
+
+    - role: resolveconf
+      tags:
+        - never
+        - resolvconf
 
     - role: mounts
       tags:
