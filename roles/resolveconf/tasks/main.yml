@@ -14,4 +14,3 @@
     cmd: resolvconf -u
   become: true
   changed_when: templated.changed
-

@@ -46,9 +46,5 @@
 
     - role: fuzzymistborn.autorestic
       become: true
-      tags:
-        - never
 
     - role: cronjobs
-      tags:
-        - never
