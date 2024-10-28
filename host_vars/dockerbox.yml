@@ -78,6 +78,7 @@ autorestic_config_yaml:
           exclude:
             - 'metube'
             - 'grocy/config/log/logrotate.status'
+            - caddy
         forget:
           keep-daily: 1
           keep-weekly: 8
