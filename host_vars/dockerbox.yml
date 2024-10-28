@@ -45,7 +45,16 @@ cronjobs:
 
 package_list:
   - name: cifs-utils
+  - name: resolvconf
 
+systemd_services: 
+  - name: resolvconf
+    state: started
+    enabled: true
+
+resolv_conf_nameservers:
+  - "192.168.2.46"
+  - "8.8.8.8"
 
 mounts:
   - src: //{{omv.hostname}}/hdd_media
