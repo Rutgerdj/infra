@@ -1,0 +1,6 @@
+- name: Configure systemd service {{ item.name }}
+  ansible.builtin.systemd_service:
+    state: "{{ item.state }}"
+    name: "{{ item.name }}"
+    enabled: " {{ item.enabled }}"
+  loop: "{{ systemd_services }}"

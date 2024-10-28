@@ -1,0 +1,4 @@
+---
+resolv_conf_search: []
+resolv_conf_nameservers:
+  - '8.8.8.8'

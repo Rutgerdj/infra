@@ -1,0 +1,17 @@
+---
+- name: Create resolv head config file from template.
+  ansible.builtin.template:
+    dest: /etc/resolvconf/resolv.conf.d/head
+    src: resolv_head.conf.j2
+    mode: '0644'
+    owner: root
+    group: root
+  become: true
+  register: "templated"
+
+- name: Update resolvconf file
+  ansible.builtin.command:
+    cmd: resolvconf -u
+  become: true
+  changed_when: templated.changed
+
