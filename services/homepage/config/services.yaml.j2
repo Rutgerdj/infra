@@ -8,49 +8,53 @@
       siteMonitor: https://192.168.2.201:8006/
       icon: proxmox.png
   - Healthchecks:
-      href: http://{{ansible_host}}:{{healthchecks.port}}/
-      siteMonitor: http://{{ansible_host}}:{{healthchecks.port}}/
+      href: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}/
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}/
       icon: healthchecks.png
   - Dozzle:
-      href: http://{{ansible_host}}:{{dozzle.port}}/
-      siteMonitor: http://{{ansible_host}}:{{dozzle.port}}/
+      href: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}/
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}/
       icon: dozzle.png
   - Openmediavault:
       href: https://{{omv.hostname}}
       siteMonitor: https://{{omv.hostname}}
       icon: openmediavault.png
+  - Adguard:
+      href: http://192.168.2.46
+      siteMonitor: http://192.168.2.46
+      icon: adguard-home.png
 
 - Apps:
   - Nextcloud:
-      href: https://{{caddy.nc.hostname}}
-      siteMonitor: https://{{caddy.nc.hostname}}
+      href: https://{{docker_stacks.caddy.nc.hostname}}
+      siteMonitor: https://{{docker_stacks.caddy.nc.hostname}}
       icon: nextcloud.png
 
   - Lubelog:
-      href: http://{{ansible_host}}:{{lubelogger.port}}/
-      siteMonitor: http://{{ansible_host}}:{{lubelogger.port}}/
+      href: http://{{ansible_host}}:{{docker_stacks.lubelogger.port}}/
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.lubelogger.port}}/
       icon: lubelogger.png
 
   - Firefly:
-      href: http://{{ansible_host}}:{{firefly.port}}
-      siteMonitor: http://{{ansible_host}}:{{firefly.port}}
+      href: http://{{ansible_host}}:{{docker_stacks.firefly.port}}
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.firefly.port}}
       icon: firefly.png
 
   - Memos:
-      href: http://{{ansible_host}}:{{memos.port}}
-      siteMonitor: http://{{ansible_host}}:{{memos.port}}
+      href: http://{{ansible_host}}:{{docker_stacks.memos.port}}
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.memos.port}}
       icon: memos.png
 
   - Grocy:
-      href: http://{{ansible_host}}:{{grocy.port}}
-      siteMonitor: http://{{ansible_host}}:{{grocy.port}}
+      href: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
       icon: grocy.png
 
 
 - Media:
   - MeTube:
-      href: http://{{ansible_host}}:{{metube.port}}/
-      siteMonitor: http://{{ansible_host}}:{{metube.port}}/
+      href: http://{{ansible_host}}:{{docker_stacks.metube.port}}/
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.metube.port}}/
       icon: metube.png
 
   - Jellyfin:

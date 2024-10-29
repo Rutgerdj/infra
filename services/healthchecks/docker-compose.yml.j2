@@ -4,7 +4,7 @@ services:
     container_name: healthchecks
     env_file: .env
     ports:
-      - "{{ healthchecks.port }}:8000"
+      - "{{ docker_stacks.healthchecks.port }}:8000"
     restart: unless-stopped
     volumes:
       - "{{ service_config_path }}/config:/config"

@@ -8,7 +8,7 @@ services:
       - "{{ service_config_path }}:/etc/wireguard"
     ports:
       - "51820:51820/udp"
-      - "{{ wg_easy.portal_port }}:{{ wg_easy.portal_port }}/tcp"
+      - "{{ docker_stacks.wg_easy.portal_port }}:{{ docker_stacks.wg_easy.portal_port }}/tcp"
     restart: unless-stopped
     cap_add:
       - NET_ADMIN

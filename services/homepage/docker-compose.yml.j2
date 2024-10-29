@@ -6,7 +6,7 @@ services:
       PUID: 1000
       PGID: 1000
     ports:
-      - "{{homepage.port}}:3000"
+      - "{{docker_stacks.homepage.port}}:3000"
     volumes:
       - ./config:/app/config
       - ./images:/app/public/images

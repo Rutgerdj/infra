@@ -15,7 +15,7 @@ cronjobs:
     hour: "*/2"
     minute: 0
   - name: Run Firefly automations at 2 am
-    job: /usr/local/bin/runitor -slug firefly-automations -- wget -qO- http://localhost:{{firefly.port}}/api/v1/cron/{{firefly.cron_token}}
+    job: /usr/local/bin/runitor -slug firefly-automations -- wget -qO- http://localhost:{{docker_stacks.firefly.port}}/api/v1/cron/{{docker_stacks.firefly.cron_token}}
     user: "{{ ansible_user }}"
     hour: 2
     minute: 0

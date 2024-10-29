@@ -6,4 +6,4 @@ services:
     volumes:
       - "{{ service_config_path }}/:/var/opt/memos"
     ports:
-      - "{{memos.port}}:5230"
+      - "{{docker_stacks.memos.port}}:5230"

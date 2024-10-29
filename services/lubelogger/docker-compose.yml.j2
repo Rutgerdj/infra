@@ -9,5 +9,5 @@ services:
       - "{{ service_config_path }}/documents:/App/wwwroot/documents"
       - "{{ service_config_path }}/images:/App/wwwroot/images"
     ports:
-      - "{{ lubelogger.port }}:8080"
+      - "{{ docker_stacks.lubelogger.port }}:8080"
     env_file: .env

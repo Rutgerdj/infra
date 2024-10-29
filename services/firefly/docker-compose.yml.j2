@@ -10,7 +10,7 @@ services:
     networks:
       - firefly_iii
     ports:
-      - "{{firefly.port}}:8080"
+      - "{{docker_stacks.firefly.port}}:8080"
     depends_on:
       - db
 

@@ -4,6 +4,6 @@ services:
     container_name: renovate
     restart: no
     environment:
-      - RENOVATE_TOKEN={{renovate.gh_token}}
+      - RENOVATE_TOKEN={{docker_stacks.renovate.gh_token}}
     volumes:
       - ./config.js:/usr/src/app/config.js:ro

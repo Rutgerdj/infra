@@ -9,5 +9,5 @@ services:
     volumes:
       - "{{ service_config_path }}/config:/config"
     ports:
-      - "{{ grocy.port }}:80"
+      - "{{ docker_stacks.grocy.port }}:80"
     restart: unless-stopped

@@ -1,8 +1,18 @@
-{{caddy.ha.hostname}} {
-    reverse_proxy {{caddy.ha.reverse_proxy}}
+{{docker_stacks.caddy.ha.hostname}} {
+    reverse_proxy {{docker_stacks.caddy.ha.reverse_proxy}}
 }
 
-{{caddy.nc.hostname}} {
+{{docker_stacks.caddy.nc.hostname}} {
     header Strict-Transport-Security max-age=31536000;
-    reverse_proxy {{caddy.nc.reverse_proxy}}
+    reverse_proxy {{docker_stacks.caddy.nc.reverse_proxy}}
 }
+
+# Docker stack proxies
+{% for service in docker_stacks | dict2items %}
+{% if service.key in docker_stacks.caddy.reverse_proxied_containers %}
+
+{{ service.key }}.db.rutgerdj.local {
+    reverse_proxy 172.17.0.1:{{ service.value.port }}
+}
+{% endif %}
+{% endfor %}
