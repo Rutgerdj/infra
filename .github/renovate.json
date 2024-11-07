@@ -3,5 +3,21 @@
   "docker-compose": {
     "enabled": true,
     "fileMatch": ["(^|/)docker-compose\\.yml\\.j2$"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": ["fireflyiii/core"],
+      "versioning": "regex:^version-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?"
+    },
+    {
+      "matchPackageNames": [
+        "ghcr.io/hotio/sonarr",
+        "ghcr.io/hotio/qbittorrent",
+        "ghcr.io/hotio/prowlarr",
+        "ghcr.io/hotio/bazarr",
+        "ghcr.io/hotio/jellyseerr"
+      ],
+      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)?"
+    }
+  ]
 }
