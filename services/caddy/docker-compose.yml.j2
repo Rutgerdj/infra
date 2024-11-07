@@ -10,3 +10,4 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - "{{ service_config_path }}/data:/data"
       - "{{ service_config_path }}/config:/config"
+      - /var/log/caddy:/var/log/caddy

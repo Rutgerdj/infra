@@ -1,8 +1,28 @@
+{
+    log {
+        output file /var/log/caddy/caddy_main.log {
+            roll_size 100MiB
+            roll_keep 5
+            roll_keep_for 60d
+        }
+        format json
+        level INFO
+    }
+}
+
+
 {{docker_stacks.caddy.ha.hostname}} {
+    log
     reverse_proxy {{docker_stacks.caddy.ha.reverse_proxy}}
 }
 
+{{docker_stacks.caddy.jf.hostname}} {
+    log
+    reverse_proxy {{docker_stacks.caddy.jf.reverse_proxy}}
+}
+
 {{docker_stacks.caddy.nc.hostname}} {
+    log
     header Strict-Transport-Security max-age=31536000;
     reverse_proxy {{docker_stacks.caddy.nc.reverse_proxy}}
 }
@@ -12,6 +32,7 @@
 {% if service.key in docker_stacks.caddy.reverse_proxied_containers %}
 
 {{ service.key }}.db.rutgerdj.local {
+    log
     reverse_proxy 172.17.0.1:{{ service.value.port }}
 }
 {% endif %}
