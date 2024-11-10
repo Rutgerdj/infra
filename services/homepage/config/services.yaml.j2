@@ -8,12 +8,12 @@
       siteMonitor: https://192.168.2.201:8006/
       icon: proxmox.png
   - Healthchecks:
-      href: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}/
-      siteMonitor: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}/
+      href: https://healthchecks.db.rutgerdj.local
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}
       icon: healthchecks.png
   - Dozzle:
-      href: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}/
-      siteMonitor: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}/
+      href: https://dozzle.db.rutgerdj.local
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}
       icon: dozzle.png
   - Openmediavault:
       href: https://{{omv.hostname}}
@@ -31,35 +31,35 @@
       icon: nextcloud.png
 
   - Lubelog:
-      href: http://{{ansible_host}}:{{docker_stacks.lubelogger.port}}/
-      siteMonitor: http://{{ansible_host}}:{{docker_stacks.lubelogger.port}}/
+      href: https://lubelogger.db.rutgerdj.local
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
       icon: lubelogger.png
 
   - Firefly:
-      href: http://{{ansible_host}}:{{docker_stacks.firefly.port}}
+      href: https://firefly.db.rutgerdj.local
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.firefly.port}}
       icon: firefly.png
 
   - Memos:
-      href: http://{{ansible_host}}:{{docker_stacks.memos.port}}
+      href: https://memos.db.rutgerdj.local
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.memos.port}}
       icon: memos.png
 
   - Grocy:
-      href: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
+      href: https://grocy.db.rutgerdj.local
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
       icon: grocy.png
 
 
 - Media:
   - MeTube:
-      href: http://{{ansible_host}}:{{docker_stacks.metube.port}}/
-      siteMonitor: http://{{ansible_host}}:{{docker_stacks.metube.port}}/
+      href: https://metube.db.rutgerdj.local
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.metube.port}}
       icon: metube.png
 
   - Jellyfin:
-      href: http://jellyfin:8096/
-      siteMonitor: http://jellyfin:8096/
+      href: https://jellyfin.rutgerdj.local
+      siteMonitor: https://jellyfin.rutgerdj.local
       icon: jellyfin.png
 
 - Arr*:
