@@ -19,6 +19,7 @@ services:
       - 8989:8989 # Sonarr
       - 9696:9696 # Prowlarr
       - 6767:6767 # Bazarr
+      - 7878:7878 # Radarr
     restart: unless-stopped
 
 
@@ -78,6 +79,19 @@ services:
       - "{{ service_config_path }}/sonarr:/config"
       - /mnt/hdd_media/arr-data:/data
     restart: unless-stopped
+
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:release-5.14.0.9383
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - "{{ service_config_path }}/radarr:/config"
+      - /mnt/hdd_media/arr-data:/data
 
   bazarr:
     container_name: bazarr
