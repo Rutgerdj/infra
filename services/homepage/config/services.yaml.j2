@@ -8,11 +8,11 @@
       siteMonitor: https://192.168.2.201:8006/
       icon: proxmox.png
   - Healthchecks:
-      href: https://healthchecks.db.rutgerdj.local
+      href: https://healthchecks.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.healthchecks.port}}
       icon: healthchecks.png
   - Dozzle:
-      href: https://dozzle.db.rutgerdj.local
+      href: https://dozzle.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.dozzle.port}}
       icon: dozzle.png
   - Openmediavault:
@@ -31,29 +31,34 @@
       icon: nextcloud.png
 
   - Lubelog:
-      href: https://lubelogger.db.rutgerdj.local
+      href: https://lubelogger.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
       icon: lubelogger.png
 
   - Firefly:
-      href: https://firefly.db.rutgerdj.local
+      href: https://firefly.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.firefly.port}}
       icon: firefly.png
 
   - Memos:
-      href: https://memos.db.rutgerdj.local
+      href: https://memos.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.memos.port}}
       icon: memos.png
 
   - Grocy:
-      href: https://grocy.db.rutgerdj.local
+      href: https://grocy.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.grocy.port}}
       icon: grocy.png
+
+  - Vikunja:
+      href: https://vikunja.{{docker_stacks.caddy.dockerbox_hostname}}
+      siteMonitor: http://{{ansible_host}}:{{docker_stacks.vikunja.port}}
+      icon: vikunja.png
 
 
 - Media:
   - MeTube:
-      href: https://metube.db.rutgerdj.local
+      href: https://metube.{{docker_stacks.caddy.dockerbox_hostname}}
       siteMonitor: http://{{ansible_host}}:{{docker_stacks.metube.port}}
       icon: metube.png
 
@@ -67,6 +72,11 @@
       href: http://{{ansible_host}}:8989/
       siteMonitor: http://{{ansible_host}}:8989/
       icon: sonarr.png
+
+  - Radarr:
+      href: http://{{ansible_host}}:7878/
+      siteMonitor: http://{{ansible_host}}:7878/
+      icon: Radarr.png
 
   - Prowlarr:
       href: http://{{ansible_host}}:9696/
