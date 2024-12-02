@@ -1,0 +1,16 @@
+services:
+  vikunja:
+    image: vikunja/vikunja:0.24.5
+    user: 1000:1000
+    environment:
+      VIKUNJA_SERVICE_JWTSECRET: {{docker_stacks.vikunja.jwtsecret}}
+      VIKUNJA_SERVICE_PUBLICURL: http://{{ansible_host}}:{{docker_stacks.vikunja.port}}
+      VIKUNJA_SERVICE_ENABLEREGISTRATION: false
+      VIKUNJA_SERVICE_TIMEZONE: Europe/Amsterdam
+
+      VIKUNJA_DATABASE_PATH: /app/vikunja/files/vikunja.db
+    ports:
+      - "{{docker_stacks.vikunja.port}}:3456"
+    restart: unless-stopped
+    volumes:
+      - "{{ service_config_path }}:/app/vikunja/files"
