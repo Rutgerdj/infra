@@ -57,7 +57,7 @@ resolv_conf_nameservers:
   - "8.8.8.8"
 
 mounts:
-  - src: //{{omv.hostname}}/hdd_media
+  - src: //{{omv.hostname}}/arr_media
     path: /mnt/hdd_media
     opts: username={{ omv.username }},password={{ omv.password }},rw,uid=1000,noauto,x-systemd.automount
     state: mounted

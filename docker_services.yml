@@ -24,6 +24,7 @@
     - role: mounts
       tags:
         - never
+        - mounts
 
     - role: geerlingguy.docker
       docker_users:
