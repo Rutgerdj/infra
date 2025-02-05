@@ -1,0 +1,23 @@
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v2.5.0
+    container_name: mealie
+    restart: unless-stopped
+    ports:
+      - "{{ docker_stacks.mealie.port }}:9000"
+
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+
+    volumes:
+      - "{{ service_config_path }}/data:/app/data/"
+
+    environment:
+      ALLOW_SIGNUP: "false"
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Amsterdam
+      BASE_URL: https://mealie.db.rutgerdj.local
+
