@@ -4,7 +4,7 @@ autorestic_run_check: false
 autorestic_config_yaml:
   version: 2
   backends:
-    remote:
+    backblaze:
       type: b2
       key: "{{restic.repo_key}}"
       path: '{{backblaze.bucket}}:workstation/'
@@ -22,6 +22,7 @@ autorestic_config_yaml:
       from: '/home/rutgerdj/Documents/bitwarden'
       to:
         - hdd
+        - backblaze
       options:
         forget:
           keep-daily: 5

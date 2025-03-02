@@ -2,8 +2,6 @@
   hosts: localhost
   connection: local
   become: false
-  vars:
-    ansible_user: "{{ lookup('env', 'USER') }}"
 
   vars_files:
     - vars/vault.yml

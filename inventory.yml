@@ -11,3 +11,8 @@ all:
       ansible_user: rutger
       ansible_python_interpreter: /usr/bin/python3
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+    
+    localhost:
+      ansible_connection: local
+      ansible_user: rutgerdj
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
