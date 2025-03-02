@@ -1,0 +1,18 @@
+- name: Local machine
+  hosts: localhost
+  connection: local
+  become: false
+  vars:
+    ansible_user: "{{ lookup('env', 'USER') }}"
+
+  vars_files:
+    - vars/vault.yml
+
+  roles:
+    - role: fuzzymistborn.autorestic
+      become: true
+
+  tasks:
+    - name: test
+      debug:
+        msg: "{{ autorestic_config_yaml }}"

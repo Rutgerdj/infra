@@ -1,0 +1,29 @@
+autorestic_config_user: "{{ ansible_user }}"
+autorestic_user_directory: "/home/{{ ansible_user}}"
+autorestic_run_check: false
+autorestic_config_yaml:
+  version: 2
+  backends:
+    remote:
+      type: b2
+      key: "{{restic.repo_key}}"
+      path: '{{backblaze.bucket}}:workstation/'
+      env:
+        B2_ACCOUNT_ID: "{{backblaze.applicationid}}"
+        B2_ACCOUNT_KEY: "{{backblaze.applicationkey}}"
+
+    hdd:
+      type: local
+      path: /mnt/sanctuary/backups/
+      key: "{{ restic.repo_key }}"
+
+  locations:
+    bitwarden:
+      from: '/home/rutgerdj/Documents/bitwarden'
+      to:
+        - hdd
+      options:
+        forget:
+          keep-daily: 5
+          keep-weekly: 8
+          keep-monthly: 4
