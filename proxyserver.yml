@@ -1,0 +1,30 @@
+---
+- name: Create proxy server
+  hosts: hetzner_vps
+  vars_files:
+    - vars/vault.yml
+  roles:
+    - role: grog.package
+      become: true
+      tags:
+        - never
+        - packages
+
+    - role: systemd
+      become: true
+      tags:
+        - never
+        - systemd
+
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: docker-services
+      services_dir: proxyserver_services
+      tags:
+        - always

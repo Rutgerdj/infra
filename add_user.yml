@@ -1,0 +1,32 @@
+---
+- name: Create a new user on Debian
+  hosts: hetzner_vps_root
+  vars:
+    new_username: rutger
+    new_user_groups: "sudo"
+    new_user_shell: /bin/bash
+
+  tasks:
+    - name: Create the user
+      user:
+        name: "{{ new_username }}"
+        groups: "{{ new_user_groups }}"
+        shell: "{{ new_user_shell }}"
+        append: yes
+        state: present
+        createhome: yes
+      
+    - name: Set up authorized keys
+      authorized_key:
+        user: "{{ new_username }}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_ed25519_hetzner.pub') }}"
+      
+    - name: Grant sudo privileges
+      lineinfile:
+        path: /etc/sudoers.d/{{ new_username }}
+        line: "{{ new_username }} ALL=(ALL) NOPASSWD: ALL"
+        state: present
+        mode: 0440
+        create: yes
+        validate: 'visudo -cf %s'

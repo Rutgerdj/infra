@@ -1,0 +1,8 @@
+{% for service in proxy_server.proxies %}
+
+{{service.host}} {
+	log
+	reverse_proxy {{service.target}}
+}
+
+{% endfor %}

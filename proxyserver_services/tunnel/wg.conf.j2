@@ -1,0 +1,11 @@
+[Interface]
+PrivateKey = {{ proxy_server.wg_private_key }}
+Address = 10.8.0.5/24
+DNS = 192.168.2.46, 192.168.2.254
+
+[Peer]
+PublicKey = {{ proxy_server.wg_public_key }}
+PresharedKey = {{ proxy_server.wg_preshared_key }}
+AllowedIPs = 0.0.0.0/0
+PersistentKeepalive = 0
+Endpoint = {{ public_ip }}:51820
