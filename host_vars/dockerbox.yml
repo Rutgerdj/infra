@@ -9,10 +9,10 @@ cronjobs:
     env: true
     job: /home/{{ansible_user}}/.profile
     user: "{{ ansible_user }}"
-  - name: Run Renovate Bot every 2 hours
+  - name: Run Renovate Bot every 8 hours
     job: /usr/local/bin/runitor -slug renovate-bot -- docker compose --file ~/services/renovate/docker-compose.yml up
     user: "{{ ansible_user }}"
-    hour: "*/2"
+    hour: "*/8"
     minute: 0
   - name: Run Firefly automations at 2 am
     job: /usr/local/bin/runitor -slug firefly-automations -- wget -qO- http://localhost:{{docker_stacks.firefly.port}}/api/v1/cron/{{docker_stacks.firefly.cron_token}}
