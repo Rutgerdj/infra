@@ -67,7 +67,7 @@ services:
 
   sonarr:
     container_name: sonarr
-    image: ghcr.io/hotio/sonarr:release-4.0.13.2932
+    image: ghcr.io/hotio/sonarr:release-4.0.14.2939
     network_mode: "service:gluetun"
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -113,7 +113,7 @@ services:
 
   jellyseerr:
     container_name: jellyseerr
-    image: ghcr.io/hotio/jellyseerr:release-2.5.0
+    image: ghcr.io/hotio/jellyseerr:release-2.5.1
     ports:
       - 5055:5055 # Jellyseer
     environment:

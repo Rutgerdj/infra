@@ -1,7 +1,7 @@
 
 services:
   web:
-    image: ghcr.io/hoarder-app/hoarder:0.22.0
+    image: ghcr.io/hoarder-app/hoarder:0.23.0
     restart: unless-stopped
     volumes:
       - "{{ service_config_path }}/data:/data"      
