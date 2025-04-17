@@ -1,2 +1,6 @@
 .vscode
 password.txt
+
+.devenv*
+.direnv*
+.pre-commit-config.yaml
