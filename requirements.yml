@@ -1,4 +1,4 @@
 roles:
   - src: geerlingguy.docker
-  - src: GROG.package
+  - src: grog.package
   - src: fuzzymistborn.autorestic
