@@ -1,0 +1,43 @@
+---
+- name: Minecraft server setup
+  hosts: mc_server
+  vars_files:
+    - vars/vault.yml
+  roles:
+    - role: GROG.package
+      become: true
+      tags:
+        - never
+        - packages
+
+    - role: systemd
+      become: true
+      tags:
+        - never
+        - systemd
+
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: fuzzymistborn.autorestic
+      become: true
+      tags:
+        - never
+        - autorestic
+
+    - role: cronjobs
+      tags:
+        - never
+        - cron
+
+    - role: docker-services
+      services_dir: mc_services
+      tags:
+        - always
+        - docker_services
+

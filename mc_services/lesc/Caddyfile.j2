@@ -1,0 +1,33 @@
+{
+    log {
+        output file /var/log/caddy/caddy_main.log {
+            roll_size 100MiB
+            roll_keep 5
+            roll_keep_for 60d
+        }
+        format json
+        level INFO
+    }
+}
+
+{% for hostname in mc.hostnames %}
+
+{{ hostname }} {
+    log
+    reverse_proxy mc:8123
+}
+{% endfor %}
+
+{{ mc.plan_hostname }} {
+    log
+
+    @allowed client_ip {{ allowed_ips | join ", " }}
+
+    handle @allowed {
+        reverse_proxy mc:8804
+    }
+
+    handle {
+        respond "Access denied" 403
+    }
+}

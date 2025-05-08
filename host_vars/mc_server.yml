@@ -1,0 +1,60 @@
+cronjobs:
+  - name: SHELL
+    env: true
+    job: /bin/bash
+    user: "{{ ansible_user }}"
+
+  - name: BASH_ENV
+    env: true
+    job: /home/{{ansible_user}}/.profile    
+    user: "{{ ansible_user }}"
+
+  - name: Backup using autorestic at 4 am
+    job: /usr/local/bin/autorestic backup -a --ci
+    user: "{{ ansible_user }}"
+    hour: 4
+    minute: 0
+  - name: Run autorestic forget
+    job: /usr/local/bin/autorestic forget -a --prune --ci
+    user: "{{ ansible_user }}"
+    weekday: 1
+    minute: 0
+    hour: 2
+  - name: Run autorestic check
+    job: /usr/local/bin/autorestic check --ci
+    user: "{{ ansible_user }}"
+    weekday: 1
+    minute: 0
+    hour: 0
+
+
+autorestic_config_user: "{{ ansible_user }}"
+autorestic_user_directory: "/home/{{ ansible_user}}"
+autorestic_run_check: false
+autorestic_config_yaml:
+  version: 2
+  backends:
+    remote:
+      type: b2
+      key: "{{restic.repo_key}}"
+      path: '{{backblaze.bucket}}:mc_server/lesc/worlds'
+      env:
+        B2_ACCOUNT_ID: "{{backblaze.applicationid}}"
+        B2_ACCOUNT_KEY: "{{backblaze.applicationkey}}"
+
+  locations:
+    lesc_mc_server:
+      from: '/home/{{ ansible_user}}/mc_services/lesc/data'
+      to:
+        - remote
+      options:
+        backup:
+          exclude:
+            - 'cache'
+            - 'plugins'
+            - 'versions'
+
+        forget:
+          keep-daily: 14
+          keep-weekly: 8
+          keep-monthly: 4

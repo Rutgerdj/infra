@@ -17,11 +17,13 @@ all:
       ansible_user: rutgerdj
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
 
-    hetzner_vps_root:
-      ansible_host: 188.245.250.104
-      ansible_user: root
-
     hetzner_vps:
       ansible_host: 188.245.250.104
       ansible_user: rutger
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+
+    mc_server:
+      ansible_host: 91.99.48.101
+      ansible_user: mc
+      ansible_python_interpreter: /usr/bin/python3
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"

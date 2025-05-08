@@ -1,0 +1,43 @@
+services:
+  mc:
+    image: itzg/minecraft-server:latest
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.21.4"
+      MEMORY: "7168M"
+      DIFFICULTY: "3"
+      TZ: "Europe/Amsterdam"
+      VIEW_DISTANCE: "32"
+
+      MOTD: {{ mc.motd }}
+      RESOURCE_PACK: "{{ mc.texture_pack_link }}"
+      ENABLE_WHITELIST: "true"
+      WHITELIST: |-
+        {{ mc.whitelist | join('\n        ') }}
+      OPS: |-
+        {{ mc.ops | join('\n        ') }}
+
+      PLAN_WEBSERVER_ALTERNATIVE_IP_ENABLED: "true"
+      PLAN_WEBSERVER_ALTERNATIVE_IP_ADDRESS: {{ mc.plan_hostname }}
+      PLAN_WEBSERVER_SECURITY_SSL_CERTIFICATE_KEYSTORE_PATH: "proxy"
+
+    volumes:
+      - "./data:/data"
+
+  caddy:
+    image: caddy:2.9.1
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - "{{ service_config_path }}/data:/data"
+      - "{{ service_config_path }}/config:/config"
