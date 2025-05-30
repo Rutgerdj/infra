@@ -1,14 +1,13 @@
 services:
   wg-easy:
-    env_file: .env
-
-    image: ghcr.io/wg-easy/wg-easy:14
     container_name: wg-easy
+    image: ghcr.io/wg-easy/wg-easy:15
     volumes:
       - "{{ service_config_path }}:/etc/wireguard"
+      - /lib/modules:/lib/modules:ro
     ports:
       - "51820:51820/udp"
-      - "{{ docker_stacks.wg_easy.portal_port }}:{{ docker_stacks.wg_easy.portal_port }}/tcp"
+      - "{{ docker_stacks.wg_easy.portal_port }}:51821/tcp"
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -16,3 +15,5 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
+    environment:
+      - INSECURE=true
