@@ -1,0 +1,11 @@
+services:
+  spot:
+    image: rutgerdj/spotbeet:0.0.2
+    ports:
+      - "{{docker_stacks.spotbeet.port}}:8800"
+    volumes:
+      - /mnt/hdd_media/arr-data/media/music:/home/spot/Music
+    environment:
+      - "SPOTIPY_CLIENT_ID={{docker_stacks.spotbeet.spotify_client_id}}"
+      - "SPOTIPY_CLIENT_SECRET={{docker_stacks.spotbeet.spotify_client_secret}}"
+

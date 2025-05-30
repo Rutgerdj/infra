@@ -19,6 +19,7 @@
 {{docker_stacks.caddy.jf.hostname}} {
     log
     reverse_proxy {{docker_stacks.caddy.jf.reverse_proxy}}
+    tls internal
 }
 
 {{docker_stacks.caddy.nc.hostname}} {
@@ -31,9 +32,10 @@
 {% for service in docker_stacks | dict2items %}
 {% if service.key in docker_stacks.caddy.reverse_proxied_containers %}
 
-{{ service.key }}.db.rutgerdj.local {
+{{ service.key }}.{{docker_stacks.caddy.dockerbox_hostname}} {
     log
     reverse_proxy 172.17.0.1:{{ service.value.port }}
+    tls internal
 }
 {% endif %}
 {% endfor %}
