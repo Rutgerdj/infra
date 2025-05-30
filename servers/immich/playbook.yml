@@ -1,0 +1,37 @@
+---
+- name: Install docker on dockerbox
+  hosts: immich_test
+  vars_files:
+    - ../../vars/vault.yml
+  roles:
+    - role: grog.package
+      become: true
+      tags:
+        - never
+        - packages
+
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: resolveconf
+      tags:
+        - never
+        - resolvconf
+
+    - role: systemd
+      become: true
+      tags:
+        - never
+        - systemd
+
+    - role: docker-services
+      services_dir: docker_services
+      tags:
+        - always
+        - docker_services
+

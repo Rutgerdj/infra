@@ -10,6 +10,17 @@
     }
 }
 
+{{immich.ml_hostname}} {
+    log
+    reverse_proxy {{immich.ml_ip}}:3003
+    tls internal
+}
+
+{{immich.internal_hostname}} {
+    log
+    reverse_proxy {{immich.ip}}:{{immich.port}}
+    tls internal
+}
 
 {{docker_stacks.caddy.ha.hostname}} {
     log

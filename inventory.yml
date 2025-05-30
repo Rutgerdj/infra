@@ -27,3 +27,9 @@ all:
       ansible_user: mc
       ansible_python_interpreter: /usr/bin/python3
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+
+    immich_test:
+      ansible_host: 192.168.2.19
+      ansible_user: rutger
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
