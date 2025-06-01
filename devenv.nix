@@ -11,6 +11,9 @@
   languages.ansible.enable = true;
   packages = with pkgs; [
     just
+    age
+    sops
+    deploy-rs
   ];
 
   pre-commit.hooks = {

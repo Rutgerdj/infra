@@ -1,0 +1,9 @@
+keys:
+  - &desktop_manjaro age1m38663uesmte2e4dsc8pznwzlxyfeqywm23rxad6djus6nml4vrsmpr8sm
+  - &immich_server age1huypvk4sq0k072k08g5xxpxkskwlnckmsf36kqz70slq8xnlmveqrt2m4s
+creation_rules:
+  - path_regex: secrets.yaml$
+    key_groups:
+    - age:
+      - *desktop_manjaro
+      - *immich_server

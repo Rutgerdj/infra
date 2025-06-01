@@ -9,7 +9,15 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.home-manager
+      inputs.sops-nix.nixosModules.sops
     ];
+
+  sops.defaultSopsFile = ../../secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+  sops.secrets.smb = {
+    owner = "rutger";
+  };
 
   # Home manager config
   home-manager = {
@@ -20,7 +28,6 @@
   };
   home-manager.backupFileExtension = "backup";
 
-
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   # boot.loader.grub.efiSupport = true;
@@ -28,6 +35,16 @@
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+
+  fileSystems."/mnt/personal_media" = {
+    device = "//192.168.2.44/personal_media";
+    fsType = "cifs";
+    options = [
+      "credentials=/run/secrets/smb"
+      "uid=1000"
+      "gid=100"
+    ];
+  };
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
