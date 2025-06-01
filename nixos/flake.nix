@@ -8,12 +8,15 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    deploy-rs.url = "github:serokell/deploy-rs";
   };
 
   outputs =
     {
       nixpkgs,
       nixpkgs-devenv,
+      deploy-rs,
       self,
       ...
     }@inputs:
@@ -39,5 +42,18 @@
           ];
         };
       };
+
+      deploy.nodes.immich-server = {
+        hostname = "immich-server";
+        sshUser = "rutger";
+        interactiveSudo = true;
+        remoteBuild = true;
+        profiles.system = {
+          user = "root";
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.immich-server;
+        };
+      };
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }

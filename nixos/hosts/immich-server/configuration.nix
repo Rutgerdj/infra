@@ -73,10 +73,18 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
+  virtualisation.docker = {
+    enable = true;
+  };
+
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
    users.users.rutger = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ 
+      "wheel"
+      "docker"
+    ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       tree
     ];
