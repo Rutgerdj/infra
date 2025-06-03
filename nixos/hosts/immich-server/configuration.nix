@@ -8,15 +8,18 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../modules/sops/default.nix
+      ../../modules/certs/default.nix
       inputs.home-manager.nixosModules.home-manager
       inputs.sops-nix.nixosModules.sops
     ];
 
-  sops.defaultSopsFile = ../../secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-
-  sops.secrets.smb = {
+  mySops = {
     owner = "rutger";
+    secrets = [
+      "smb"
+      "immich"
+    ];
   };
 
   # Home manager config
@@ -52,8 +55,8 @@
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
-
+  time.timeZone = "Europe/Amsterdam";
+  networking.nameservers = [ "192.168.2.46" ];
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";

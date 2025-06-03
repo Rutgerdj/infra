@@ -15,7 +15,7 @@
 
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell"; # you can pick another like "robbyrussell", "powerlevel10k" etc.
+      theme = "agnoster"; # you can pick another like "robbyrussell", "powerlevel10k" etc.
       plugins = [
         "git"
         "z"

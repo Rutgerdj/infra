@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -41,6 +41,9 @@
     #   org.gradle.daemon.idletimeout=3600000
     # '';
   };
+
+  home.file."docker_stacks".source = ./docker_services;
+  home.file."docker_stacks".recursive = true;
 
   home.sessionVariables = {
     # EDITOR = "emacs";
