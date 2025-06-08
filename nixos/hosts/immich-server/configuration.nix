@@ -46,6 +46,9 @@
       "credentials=/run/secrets/smb"
       "uid=1000"
       "gid=100"
+      "x-systemd.automount"
+      "x-systemd.requires=network-online.target"
+      "x-systemd.after=network-online.target"
     ];
   };
 
