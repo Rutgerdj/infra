@@ -49,3 +49,6 @@
       become: true
 
     - role: cronjobs
+      tags:
+        - never
+        - cronjobs
