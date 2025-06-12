@@ -31,6 +31,8 @@
   };
   home-manager.backupFileExtension = "backup";
 
+  services.netbird.enable = true;
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   # boot.loader.grub.efiSupport = true;
@@ -52,7 +54,7 @@
     ];
   };
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "immich"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
