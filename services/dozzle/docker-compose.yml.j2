@@ -6,6 +6,14 @@ services:
     environment:
       - DOZZLE_ENABLE_ACTIONS=true
       - DOZZLE_NO_ANALYTICS=true
+      - DOZZLE_AUTH_PROVIDER=simple
     ports:
       - "{{docker_stacks.dozzle.port}}:8080"
     restart: unless-stopped
+    secrets:
+      - source: users
+        target: /data/users.yml
+
+secrets:
+  users:
+    file: users.yml
