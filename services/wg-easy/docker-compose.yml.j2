@@ -6,7 +6,7 @@ services:
       - "{{ service_config_path }}:/etc/wireguard"
       - /lib/modules:/lib/modules:ro
     ports:
-      - "51820:51820/udp"
+      - "51830:51820/udp"
       - "{{ docker_stacks.wg_easy.portal_port }}:51821/tcp"
     restart: unless-stopped
     cap_add:
