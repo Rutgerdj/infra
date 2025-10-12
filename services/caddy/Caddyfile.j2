@@ -14,6 +14,15 @@ nb.rutgerdj.net {
     reverse_proxy 192.168.2.20
 }
 
+jf.rutgerdj.net {
+    @disallowed_ips not client_ip {{docker_stacks.caddy.allowed_ips}}
+
+    abort @disallowed_ips
+    reverse_proxy 192.168.2.23:8096
+
+    log
+}
+
 {{immich.ml_hostname}} {
     log
     reverse_proxy {{immich.ml_ip}}:3003
