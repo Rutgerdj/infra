@@ -2,3 +2,4 @@ roles:
   - src: geerlingguy.docker
   - src: grog.package
   - src: fuzzymistborn.autorestic
+  - src: community.proxmox

@@ -1,0 +1,56 @@
+---
+- name: Setup LXC for immich
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - "../vars/vault.yml"
+    - "../vars/public.yml"
+  vars:
+    vmid: 512
+    memory: 4096
+    disk_size: 32
+  tasks:
+    - name: Create LXC container
+      community.proxmox.proxmox:
+        vmid: "{{vmid}}"
+        state: present
+        node: "{{proxmox.hosts.hydrogen.node}}"
+        api_user: "{{proxmox.hosts.hydrogen.api_user}}"
+        api_password: "{{proxmox.hosts.hydrogen.api_password}}"
+        api_host: "{{proxmox.hosts.hydrogen.api_host}}"
+        password: "{{proxmox.hosts.hydrogen.lxcs.immich.password}}"
+        hostname: immich
+        timezone: Europe/Amsterdam
+        features:
+          - nesting=1
+        netif:
+          net0: "name=eth0,gw=192.168.2.254,ip={{ hostvars['immich']['ansible_host'] }}/24,bridge=vmbr0"
+        unprivileged: true
+        pubkey: "{{ ssh_keys | join('\n') }}"
+        memory: "{{ memory }}"
+        ostemplate: 'local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst'
+        disk_volume:
+          storage: local-lvm
+          size: "{{ disk_size }}"
+
+    - name: Add extra lines to lxc.conf for iGPU passthrough
+      lineinfile:
+        path: "/etc/pve/lxc/{{ vmid }}.conf"
+        line: "{{ item }}"
+        state: present
+      loop:
+        - "lxc.cgroup2.devices.allow: c 226:0 rwm"
+        - "lxc.cgroup2.devices.allow: c 226:128 rwm"
+        - "lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file"
+        - "lxc.apparmor.profile: unconfined"
+        - "lxc.mount.entry: /dev/null sys/module/apparmor/parameters/enabled none bind 0 0"
+      delegate_to: hydrogen
+
+    - name: Start LXC container
+      community.proxmox.proxmox:
+        vmid: "{{vmid}}"
+        state: started
+        node: "{{proxmox.hosts.hydrogen.node}}"
+        api_user: "{{proxmox.hosts.hydrogen.api_user}}"
+        api_password: "{{proxmox.hosts.hydrogen.api_password}}"
+        api_host: "{{proxmox.hosts.hydrogen.api_host}}"

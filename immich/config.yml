@@ -1,0 +1,19 @@
+---
+- name: Setup LXC for immich
+  hosts: immich
+  gather_facts: yes
+  vars_files:
+    - "../vars/vault.yml"
+  roles:
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: docker-services
+      services_dir: docker_services
+      tags:
+        - always

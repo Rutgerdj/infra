@@ -14,6 +14,8 @@
     age
     sops
     deploy-rs
+    opentofu
+    python312Packages.proxmoxer
   ];
 
   pre-commit.hooks = {
