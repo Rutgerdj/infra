@@ -8,7 +8,10 @@
 {
   cachix.enable = false;
 
-  languages.ansible.enable = true;
+  languages.ansible = {
+    enable = true;
+  };
+
   packages = with pkgs; [
     just
     age
@@ -18,7 +21,7 @@
     python312Packages.proxmoxer
   ];
 
-  pre-commit.hooks = {
+  git-hooks.hooks = {
     vault-encrypted = {
       enable = true;
       name = "Ensure vars/vault.yml is ansible-vault encrypted";
