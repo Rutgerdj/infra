@@ -1,0 +1,7 @@
+mounts:
+  - src: //{{omv.hostname}}/personal_media
+    path: /mnt/personal_media
+    boot: false
+    opts: username={{ omv.username }},password={{ omv.password }},rw,uid=1000,gid=1000,nofail,x-systemd.automount
+    state: mounted
+    fstype: cifs

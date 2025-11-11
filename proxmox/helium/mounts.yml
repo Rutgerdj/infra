@@ -1,0 +1,10 @@
+---
+- name: Setup mounts for helium pve
+  hosts: helium
+  gather_facts: yes
+  vars_files:
+    - "../../vars/vault.yml"
+    - "../../vars/public.yml"
+  roles:
+    - role: mounts
+
