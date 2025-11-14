@@ -1,0 +1,51 @@
+---
+- name: Set variables variable
+  block:
+    - name: Set service name
+      ansible.builtin.set_fact:
+        service_name: "{{ project_file.path | dirname | basename }}"
+
+    - name: Set service_config_path
+      ansible.builtin.set_fact:
+        service_config_path: "{{ config_dir }}/{{ service_name }}"
+
+- name: debug
+  debug: 
+    msg: "{{ service_config_path }}"
+
+- name: Find all files in directory
+  ansible.builtin.find:
+    paths: "{{ project_file.path | dirname }}"
+    hidden: true
+    recurse: true
+    patterns:
+      - "*.j2"
+  register: files_to_template
+  delegate_to: localhost
+
+- name: Apply template to files in directory
+  ansible.builtin.template:
+    src: "{{ item.path }}"
+    dest: "{{target_dir}}/{{ item.path.replace('.j2', '') }}"
+    mode: "644"
+  loop: "{{ files_to_template.files }}"
+  register: templated
+
+- name: Create directory for config files for {{ service_name }}
+  become: true
+  ansible.builtin.file:
+    path: "{{ service_config_path }}"
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: "755"
+  when: templated.changed
+
+# - name: debug
+#   debug:
+#     msg: "{{ project_file.path | dirname }}"
+- name: Docker compose up for {{ service_name }}
+  community.docker.docker_compose_v2:
+    state: present
+    project_src: "{{target_dir}}/{{ project_file.path | dirname }}"
+  # when: templated.changed

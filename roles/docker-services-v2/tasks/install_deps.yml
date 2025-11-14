@@ -1,0 +1,9 @@
+---
+- name: Install deps
+  become: true
+  become_user: root
+  ansible.builtin.apt:
+    name:
+      - rsync
+    state: present
+    update_cache: true
