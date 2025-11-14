@@ -4,16 +4,31 @@
   gather_facts: yes
   vars_files:
     - "../vars/vault.yml"
+  vars:
+    user: "immich"
+
+  tasks:
+    - name: Create database directory
+      file:
+        path: "/home/{{ user }}/database"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: '0755'
+
   roles:
     - role: geerlingguy.docker
       docker_users:
-        - "{{ ansible_user }}"
+        - "{{ user }}"
       become: true
       tags:
         - never
         - install_docker
 
-    - role: docker-services
+    - role: docker-services-v2
       services_dir: docker_services
+      docker_user: "{{ user }}"
+      target_dir: "/home/{{ user }}"
+      config_dir: "/home/{{ user }}/.docker_config"
       tags:
         - always
