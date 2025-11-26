@@ -1,12 +1,26 @@
+volumes:
+  etc_wireguard:
+
 services:
   wg-easy:
-    container_name: wg-easy
+    environment:
+      INIT_ENABLED: true
+      INIT_USERNAME: admin
+      INIT_PASSWORD: "{{ docker_stacks.wg_easy.password }}"
+      INIT_HOST: "{{ docker_stacks.wg_easy.host }}"
+      INIT_PORT: 51822
+
     image: ghcr.io/wg-easy/wg-easy:15
+    container_name: wg-easy
+    networks:
+      wg:
+        ipv4_address: 10.42.42.42
+        ipv6_address: fdcc:ad94:bacf:61a3::2a
     volumes:
-      - "{{ service_config_path }}:/etc/wireguard"
+      - etc_wireguard:/etc/wireguard
       - /lib/modules:/lib/modules:ro
     ports:
-      - "51830:51820/udp"
+      - "51822:51822/udp"
       - "{{ docker_stacks.wg_easy.portal_port }}:51821/tcp"
     restart: unless-stopped
     cap_add:
@@ -15,5 +29,16 @@ services:
     sysctls:
       - net.ipv4.ip_forward=1
       - net.ipv4.conf.all.src_valid_mark=1
-    environment:
-      - INSECURE=true
+      - net.ipv6.conf.all.disable_ipv6=0
+      - net.ipv6.conf.all.forwarding=1
+      - net.ipv6.conf.default.forwarding=1
+
+networks:
+  wg:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.42.42.0/24
+        - subnet: fdcc:ad94:bacf:61a3::/64

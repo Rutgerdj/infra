@@ -1,0 +1,100 @@
+---
+- name: Setup LXC for Nextcloud
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - "../vars/vault.yml"
+    - "../vars/public.yml"
+  vars:
+    vmid: 222
+    memory: 4096
+    disk_size: 512
+    lxc_image: "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
+  tasks:
+    - name: Create LXC container
+      community.proxmox.proxmox:
+        vmid: "{{ vmid }}"
+        state: present
+        node: "{{proxmox.hosts.helium.node}}"
+        api_user: "{{proxmox.hosts.helium.api_user}}"
+        api_password: "{{proxmox.hosts.helium.api_password}}"
+        api_host: "{{proxmox.hosts.helium.api_host}}"
+        password: "{{proxmox.hosts.helium.lxcs.nextcloud.password}}"
+        hostname: nextcloud
+        timezone: Europe/Amsterdam
+        features:
+          - nesting=1
+          - fuse=1
+        netif:
+          net0: "name=eth0,gw={{ home_network.gateway }},ip={{ hostvars['nextcloud']['ansible_host'] }}/24,bridge=vmbr0"
+        unprivileged: true
+        pubkey: "{{ ssh_keys | join('\n') }}"
+        memory: "{{ memory }}"
+        ostemplate: "{{ lxc_image }}"
+        # mount_volumes:
+        #   - id: mp0
+        #     host_path: /mnt/personal_media
+        #     mountpoint: /mnt/personal_media
+
+        disk_volume:
+          storage: local-lvm
+          size: "{{ disk_size }}"
+
+    - name: Add extra lines to lxc.conf
+      lineinfile:
+        path: "/etc/pve/lxc/{{ vmid }}.conf"
+        line: "{{ item }}"
+        state: present
+      loop:
+        # Apparmor workaround for containerd
+        - "lxc.apparmor.profile: unconfined"
+        - "lxc.mount.entry: /dev/null sys/module/apparmor/parameters/enabled none bind 0 0"
+
+        # Map ids to access mounts
+        - "lxc.idmap: u 0 100000 1000"
+        - "lxc.idmap: g 0 100000 1000"
+        - "lxc.idmap: u 1000 1000 1"
+        - "lxc.idmap: g 1000 1000 1"
+        - "lxc.idmap: u 1001 101001 64535"
+        - "lxc.idmap: g 1001 101001 64535"
+      delegate_to: helium
+
+    - name: Start LXC container
+      community.proxmox.proxmox:
+        vmid: "{{ vmid }}"
+        state: started
+        node: "{{proxmox.hosts.helium.node}}"
+        api_user: "{{proxmox.hosts.helium.api_user}}"
+        api_password: "{{proxmox.hosts.helium.api_password}}"
+        api_host: "{{proxmox.hosts.helium.api_host}}"
+
+    - name: Wait for container to be ready
+      pause:
+        seconds: 10
+
+    - name: Create nextcloud group with specific GID
+      become: yes
+      delegate_to: nextcloud
+      ansible.builtin.group:
+        name: nextcloud
+        gid: 1000
+        state: present
+
+    - name: Create nextcloud user in container
+      delegate_to: nextcloud
+      become: yes
+      user:
+        name: nextcloud
+        uid: 1000
+        group: nextcloud
+        shell: /bin/bash
+        password: "{{ proxmox.hosts.helium.lxcs.nextcloud.password | password_hash('sha512') }}"
+        append: yes
+
+    - name: Set up SSH access for nextcloud user
+      delegate_to: nextcloud
+      become: yes
+      authorized_key:
+        user: nextcloud
+        state: present
+        key: "{{ ssh_keys | join('\n') }}"

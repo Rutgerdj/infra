@@ -10,6 +10,24 @@
     }
 }
 
+{{ mc.plan_hostname }} {
+    log
+
+    @allowed client_ip {{allowed_ips | join(" ")}}
+
+    handle @allowed {
+        reverse_proxy {{mc.target_host}}:8804
+    }
+
+    handle {
+        respond "Access denied" 403
+    }
+}
+
+lesc.rutgerdj.net {
+    reverse_proxy {{mc.target_host}}:8100
+}
+
 nb.rutgerdj.net {
     reverse_proxy 192.168.2.20
 }

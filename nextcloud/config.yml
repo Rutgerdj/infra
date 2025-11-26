@@ -1,0 +1,26 @@
+---
+- name: Setup LXC for nextcloud
+  hosts: nextcloud
+  gather_facts: yes
+  vars_files:
+    - "../vars/vault.yml"
+  vars:
+    user: "nextcloud"
+
+  tasks:
+  roles:
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ user }}"
+      become: true
+      tags:
+        - never
+        - install_docker
+
+    - role: docker-services-v2
+      services_dir: services
+      docker_user: "{{ user }}"
+      target_dir: "/home/{{ user }}"
+      config_dir: "/home/{{ user }}/.docker_config"
+      tags:
+        - always
