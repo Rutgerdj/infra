@@ -1,0 +1,93 @@
+---
+- name: Setup LXC for general_backup
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - "../../../../vars/vault.yml"
+    - "../../../../vars/public.yml"
+  vars:
+    vmid: 102
+    memory: 4096
+    disk_size: 16
+    lxc_image: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  tasks:
+    - name: Create LXC container
+      community.proxmox.proxmox:
+        vmid: "{{ vmid }}"
+        state: present
+        node: "{{proxmox.hosts.neon.node}}"
+        api_user: "{{proxmox.hosts.neon.api_user}}"
+        api_password: "{{proxmox.hosts.neon.api_password}}"
+        api_host: "{{proxmox.hosts.neon.api_host}}"
+        password: "{{proxmox.hosts.neon.lxcs.bup.password}}"
+        hostname: bup
+        timezone: Europe/Amsterdam
+        features:
+          - nesting=1
+        netif:
+          net0: "name=eth0,gw={{ home_network.gateway }},ip={{ hostvars['bup']['ansible_host'] }}/24,bridge=vmbr0"
+        unprivileged: true
+        pubkey: "{{ ssh_keys | join('\n') }}"
+        memory: "{{ memory }}"
+        ostemplate: "{{ lxc_image }}"
+
+        disk_volume:
+          storage: local-lvm
+          size: "{{ disk_size }}"
+        mount_volumes:
+          - id: mp0
+            host_path: /mnt/pve/backup-nvme/general_backup_data
+            mountpoint: /mnt/general_backup_data
+
+    - name: Start LXC container
+      community.proxmox.proxmox:
+        vmid: "{{ vmid }}"
+        state: started
+        node: "{{proxmox.hosts.neon.node}}"
+        api_user: "{{proxmox.hosts.neon.api_user}}"
+        api_password: "{{proxmox.hosts.neon.api_password}}"
+        api_host: "{{proxmox.hosts.neon.api_host}}"
+
+    - name: Wait for container to be ready
+      pause:
+        seconds: 10
+
+    - name: Create bup group with specific GID
+      become: yes
+      delegate_to: bup
+      ansible.builtin.group:
+        name: bup
+        gid: 1000
+        state: present
+
+    - name: Create bup user in container
+      delegate_to: bup
+      become: yes
+      user:
+        name: bup
+        uid: 1000
+        groups: 
+          - bup
+        shell: /bin/bash
+        password: "{{ proxmox.hosts.neon.lxcs.bup.password | password_hash('sha512') }}"
+        append: yes
+
+    - name: Set up SSH access for bup user
+      delegate_to: bup
+      become: yes
+      authorized_key:
+        user: bup
+        state: present
+        key: "{{ ssh_keys | join('\n') }}"
+
+    - name: Set up SSH access for bup user
+      delegate_to: bup
+      become: yes
+      authorized_key:
+        user: bup
+        state: present
+        key: "{{ ssh_keys | join('\n') }}"
+
+  # roles:
+  #   - role: grog.package
+  #     become: true

@@ -6,6 +6,17 @@ all:
       ansible_python_interpreter: /usr/bin/python3
       ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
 
+    neon:
+      ansible_host: 192.168.2.205
+      ansible_user: root
+      ansible_python_interpreter: /usr/bin/python3
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+
+    bup:
+      ansible_host: 192.168.2.126
+      ansible_user: root
+      ansible_become_pass: "{{ become_passes[inventory_hostname] }}"
+
     immich:
       ansible_host: 192.168.2.55
       ansible_user: root
