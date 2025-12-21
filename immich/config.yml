@@ -17,6 +17,14 @@
         mode: '0755'
 
   roles:
+    - role: cronjobs
+      tags:
+        - never
+        - cronjobs
+
+    - role: fuzzymistborn.autorestic
+      become: true
+
     - role: geerlingguy.docker
       docker_users:
         - "{{ user }}"

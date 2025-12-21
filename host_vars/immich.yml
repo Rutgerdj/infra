@@ -1,0 +1,35 @@
+cronjobs:
+  - name: Backup using autorestic at 4 am
+    job: /usr/local/bin/autorestic backup -a --ci
+    user: "immich"
+    hour: 4
+    minute: 0
+  - name: Run autorestic forget
+    job: /usr/local/bin/autorestic forget -a --prune --ci
+    user: "immich"
+    weekday: 1
+    minute: 0
+    hour: 2
+
+
+autorestic_config_user: "immich"
+autorestic_user_directory: "/home/immich"
+autorestic_run_check: false
+autorestic_config_yaml:
+  version: 2
+  backends:
+    restic_server:
+      type: sftp
+      path: "bup@{{ hostvars['bup']['ansible_host'] }}:/mnt/general_backup_data/immich"
+      key: "{{ bup.key }}"
+
+  locations:
+    immich_pictures:
+      from: '/mnt/personal_media/picture_data'
+      to: restic_server
+      options:
+        forget:
+          keep-daily: 7
+          keep-weekly: 8
+          keep-monthly: 4
+          keep-yearly: 1
