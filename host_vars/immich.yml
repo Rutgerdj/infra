@@ -1,4 +1,12 @@
 cronjobs:
+  - name: SHELL
+    env: true
+    job: /bin/bash
+    user: "immich"
+  - name: BASH_ENV
+    env: true
+    job: /home/immich/.profile
+    user: "immich"
   - name: Backup using autorestic at 4 am
     job: /usr/local/bin/autorestic backup -a --ci
     user: "immich"
