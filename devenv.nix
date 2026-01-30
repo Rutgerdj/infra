@@ -19,6 +19,7 @@
     deploy-rs
     opentofu
     python312Packages.proxmoxer
+    immich-go
   ];
 
   git-hooks.hooks = {
