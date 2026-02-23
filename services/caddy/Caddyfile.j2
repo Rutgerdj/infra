@@ -33,7 +33,7 @@ nb.rutgerdj.net {
 }
 
 jf.rutgerdj.net {
-    @disallowed_ips not client_ip {{docker_stacks.caddy.allowed_ips}}
+    @disallowed_ips not client_ip {{docker_stacks.caddy.jf.allowed_ips}}
 
     abort @disallowed_ips
     reverse_proxy 192.168.2.23:8096
