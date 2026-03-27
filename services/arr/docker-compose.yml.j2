@@ -67,7 +67,7 @@ services:
 
   sonarr:
     container_name: sonarr
-    image: ghcr.io/hotio/sonarr:release-4.0.16.2944
+    image: ghcr.io/hotio/sonarr:release-4.0.17.2952
     network_mode: "service:gluetun"
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -98,7 +98,7 @@ services:
 
   bazarr:
     container_name: bazarr
-    image: ghcr.io/hotio/bazarr:release-1.5.5
+    image: ghcr.io/hotio/bazarr:release-1.5.6
     network_mode: "service:gluetun"
     environment:
       - PUID=1000
