@@ -27,7 +27,7 @@ services:
 
   qbittorrent:
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent:release-5.2.0
+    image: ghcr.io/hotio/qbittorrent:release-5.2.3
     network_mode: "service:gluetun"
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -49,7 +49,7 @@ services:
 
   prowlarr:
     container_name: prowlarr
-    image: ghcr.io/hotio/prowlarr:release-2.3.5.5327
+    image: ghcr.io/hotio/prowlarr:release-2.5.2.5491
     network_mode: "service:gluetun"
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -67,7 +67,7 @@ services:
 
   sonarr:
     container_name: sonarr
-    image: ghcr.io/hotio/sonarr:release-4.0.17.2952
+    image: ghcr.io/hotio/sonarr:release-4.0.19.2979
     network_mode: "service:gluetun"
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
